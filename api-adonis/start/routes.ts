@@ -20,6 +20,10 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async () => {
-  return { hello: 'world' }
-})
+Route.get('/pesquisa', 'ColaboradorsController.SelecionaColaboradores').middleware('Auth')
+Route.post('/inserecolaborador', 'ColaboradorsController.InsereColaborador').middleware('Auth')
+Route.post('/alteracolaborador', 'ColaboradorsController.AlteraDadosDoColaborador').middleware('Auth')
+Route.post('/excluicolaborador', 'ColaboradorsController.DesativaColaborador').middleware('Auth')
+Route.post('/colaborador/alterarsenha', 'ColaboradorsController.AlteraSenha').middleware('Auth')
+Route.post('/colaborador/cadastro','ColaboradorsController.CadastroColaborador').middleware('Auth')
+Route.post('/login','ColaboradorsController.Login')
