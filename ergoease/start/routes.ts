@@ -28,3 +28,5 @@ Route.post('/colaborador/alterarsenha', 'ColaboradorsController.AlteraSenha').mi
 Route.post('/colaborador/cadastro','ColaboradorsController.CadastroColaborador').middleware('Auth')
 Route.post('/colaborador/EsqueciSenha', 'ColaboradorsController.EsqueciSenha')
 Route.post('/login','ColaboradorsController.Login')
+Route.post('/loginEmpresa', 'ColaboradorsController.LoginEmpresa')
+Route.post('/consultaColaboradores', 'ColaboradorsController.SelecionaColaboradoresDaEmpresa').middleware('Auth')
