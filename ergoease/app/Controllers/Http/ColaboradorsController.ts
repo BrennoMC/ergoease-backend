@@ -210,7 +210,7 @@ export default class ColaboradorsController {
                 .where('email', data.email)
                 .select('senha','nome_empresa', 'cnpj')
 
-            if (dados[0].senha.toString() == data.senha.toString()){
+            if (await Hash.verify(String(dados[0].senha),data.senha)){
                 const token = jwt.sign({
                         userId: dados[0].cnpj,
                         userName: dados[0].nome_empresa
@@ -244,4 +244,26 @@ export default class ColaboradorsController {
         }
 
 
+    //Empresa altera seus proprios dados
+    public async AlteraDadosEmpresa({request, response, params}:HttpContextContract){
+        const data = request.body()
+        const dadosEmpresa = params.userData //Aqui retorna o payload
+
+        try {
+            await Database
+            .query()
+            .from('empresas')
+            .where('cnpj', dadosEmpresa.userId)
+            .update({ 
+                senha: data.senha,
+                telefone: data.telefone
+            })  
+            response.ok({response:'Dados alterados'})
+        }
+        catch (error) {
+            console.log(error)
+            response.unauthorized({
+                response: 'Erro ao alterar dados'})
+        }
+    }
 }
