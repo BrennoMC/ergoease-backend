@@ -2,7 +2,9 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Hash from '@ioc:Adonis/Core/Hash'
 import Database from '@ioc:Adonis/Lucid/Database'
 import Env from '@ioc:Adonis/Core/Env'
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken' 
+
+const axios = require('axios');
 
 
 export default class ColaboradorsController {
@@ -158,6 +160,43 @@ export default class ColaboradorsController {
         } catch (error){
             response.unauthorized({
                 response:'Erro ao obter cadastro'})
+        }
+    }
+
+    //Usuario esqueceu a senha
+    public async EsqueciSenha({request,response}:HttpContextContract){
+        const data = request.body()
+        try{
+            var dados = await Database
+                .query()
+                .from('colaboradores')
+                .where('email', data.email)
+                .select('email', 'nome_completo')
+
+            //return dados
+
+            if (data.email == dados[0].email){
+                const token = jwt.sign({
+                        userId: dados[0].matricula,
+                        userName: dados[0].nome_completo
+                       }, Env.get('JWT_PASSWORD'))
+
+                axios.post('http://localhost:8000/recuperarSenha', {nome: dados[0].nome_completo, email: dados[0].email, token: token})
+                      .then(function (response) {
+
+                        console.log(response.data)
+                        //return response.data
+                        return JSON.stringify(response.data)
+
+                      })
+                      .catch(function (error) {
+                        console.error(error)
+                        return error
+                      });
+                //return {email: dados[0].email, token: token }
+            }
+        }catch(error){
+            response.unauthorized()
         }
     }
 }
