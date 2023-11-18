@@ -26,4 +26,5 @@ Route.post('/alteracolaborador', 'ColaboradorsController.AlteraDadosDoColaborado
 Route.post('/excluicolaborador', 'ColaboradorsController.DesativaColaborador').middleware('Auth')
 Route.post('/colaborador/alterarsenha', 'ColaboradorsController.AlteraSenha').middleware('Auth')
 Route.post('/colaborador/cadastro','ColaboradorsController.CadastroColaborador').middleware('Auth')
+Route.post('/colaborador/EsqueciSenha', 'ColaboradorsController.EsqueciSenha')
 Route.post('/login','ColaboradorsController.Login')
