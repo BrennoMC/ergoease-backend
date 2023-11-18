@@ -199,4 +199,49 @@ export default class ColaboradorsController {
             response.unauthorized()
         }
     }
+
+    //Login empresa
+    public async LoginEmpresa({request,response}:HttpContextContract){
+        const data = request.body()
+        try{
+            var dados = await Database
+                .query()
+                .from('empresas')
+                .where('email', data.email)
+                .select('senha','nome_empresa', 'cnpj')
+
+            if (dados[0].senha.toString() == data.senha.toString()){
+                const token = jwt.sign({
+                        userId: dados[0].cnpj,
+                        userName: dados[0].nome_empresa
+                       }, Env.get('JWT_PASSWORD'));
+                return { dados, token: token }
+            }
+        }catch(error){
+            response.unauthorized()
+        }
+    }
+
+    //Usuário Adm solicita todos os colaboradores da empresa (não retorna aqueles que estão desativados)
+    public async SelecionaColaboradoresDaEmpresa({response, params}:HttpContextContract){
+
+        const dadosEmpresa = params.userData //Aqui retorna o payload
+
+        try {
+            const users = await Database
+            .from('colaboradores')
+            //.where('deletado',false) 
+            .whereIn(['deletado', 'cnpj_empresa'], [[false, dadosEmpresa.userId]])
+            .select('nome_completo','email','departamento','matricula')
+            
+            response.ok({
+                response: users}) 
+        } catch (error) {
+            response.unauthorized({
+                response:'Erro ao pesquisar'})
+        }
+            
+        }
+
+
 }
