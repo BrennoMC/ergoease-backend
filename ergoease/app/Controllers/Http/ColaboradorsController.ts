@@ -266,4 +266,46 @@ export default class ColaboradorsController {
                 response: 'Erro ao alterar dados'})
         }
     }
+
+    //Colaborador escreve o feedback
+    public async Feedback({params, response, request}:HttpContextContract){
+        const dados = request.body()
+        const data = params.userData        
+        try{
+            const feedback = await Database
+                .table('feedback')
+                .insert({
+                    matricula_colaborador: data.userId,
+                    comentario: dados.comentario
+                })
+            response.ok({
+                response: feedback
+            }) 
+        } catch (error){
+            response.unauthorized({
+                response:'Erro ao cadastrar feedback'})
+        }
+    }
+
+    //Empresa consulta todos os feedbacks
+    public async ConsultaFeedback({response, params}: HttpContextContract){
+        const dadosEmpresa = params.userData
+
+        try{
+            const feedback = await Database
+                .from('feedback')
+                .innerJoin('colaboradores', 'feedback.matricula_colaborador', '=', 'colaboradores.matricula')
+                .join('empresas', 'colaboradores.cnpj_empresa', '=', 'empresas.cnpj')
+                .where('empresas.cnpj', dadosEmpresa.userId)
+                .select('colaboradores.nome_completo', 'feedback.comentario', 'empresas.nome_empresa')
+            response.ok({
+                response: feedback
+            }) 
+        } catch (error){
+            response.unauthorized({
+                response:'Erro ao obter feedback'})
+        }
+
+    }
+
 }
