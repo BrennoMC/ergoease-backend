@@ -311,13 +311,20 @@ export default class ColaboradorsController {
     //Envia email para empresa que solicitou orçamento
     public async Orcamento({request,response}:HttpContextContract){
         const data = request.body()
+
+        console.log(data)
+        
         try{
 
-            axios.post('http://localhost:8000/orcamento', {nome: data.nome_completo, email: data.email})
+            axios.post('http://localhost:8000/orcamento', {nome: data.name, email: data.email})
                     .then(function (response) {
 
-                    console.log(response.data)
-                    //return response.data
+                    console.log("Retorno servidor: " + response.data)
+                    console.log("Tipo: " + typeof(response.data))
+
+                    let retorno = "Sucesso"
+
+                    return retorno
                     return JSON.stringify(response.data)
 
                     })
