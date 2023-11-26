@@ -308,4 +308,28 @@ export default class ColaboradorsController {
 
     }
 
+    //Envia email para empresa que solicitou orçamento
+    public async Orcamento({request,response}:HttpContextContract){
+        const data = request.body()
+        try{
+
+            axios.post('http://localhost:8000/orcamento', {nome: data.nome_completo, email: data.email})
+                    .then(function (response) {
+
+                    console.log(response.data)
+                    //return response.data
+                    return JSON.stringify(response.data)
+
+                    })
+                    .catch(function (error) {
+                    console.error(error)
+                    return error
+                    });
+            //return {email: dados[0].email, token: token }
+            
+        }catch(error){
+            response.unauthorized()
+        }
+    }
+
 }
