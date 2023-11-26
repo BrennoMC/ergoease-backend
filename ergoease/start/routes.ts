@@ -33,3 +33,4 @@ Route.post('/consultaColaboradores', 'ColaboradorsController.SelecionaColaborado
 Route.post('/alteraDadosEmpresa', 'ColaboradorsController.AlteraDadosEmpresa').middleware('Auth')
 Route.post('/colaborador/feedback', 'ColaboradorsController.Feedback').middleware('Auth')
 Route.post('/feedback', 'ColaboradorsController.ConsultaFeedback').middleware('Auth')
+Route.post('/orcamento', 'ColaboradorsController.Orcamento')
