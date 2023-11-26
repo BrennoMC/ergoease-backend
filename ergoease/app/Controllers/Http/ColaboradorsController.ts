@@ -339,4 +339,33 @@ export default class ColaboradorsController {
         }
     }
 
+    //Cadastro da empresa
+    public async CadastroEmpresa({request, response}:HttpContextContract) {
+        const data = request.body()
+
+        try {
+            await Database
+            .table('empresas') 
+            .insert({ 
+                cnpj : data.cnpj,
+                senha: await Hash.make(data.senha),
+                email: data.email,
+                nome_empresa: data.nome,
+                telefone: data.telefone,
+                cidade: data.cidade,
+                rua: data.rua,
+                cep: data.cep,
+                numero: data.numero,
+                bairro: data.bairro,
+                estado: data.estado 
+            })
+
+            response.ok({
+                response : 'Empresa cadastrada' + data })
+        } catch (error) {
+            response.unauthorized({
+                response:'Erro ao inserir colaborador' + error})
+        }
+    }
+
 }
