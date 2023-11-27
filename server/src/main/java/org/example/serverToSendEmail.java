@@ -167,8 +167,8 @@ public class serverToSendEmail {
                             InternetAddress.parse(email)
                     );
                     message.setSubject("Solicitação de orçamento");
-                    message.setText("Olá " + nome + ", recebemos seu pedido de orçamento");
-
+                    message.setText("Olá " + nome + ", recebemos seu pedido de orçamento.\n\n" + "Acesse o link para realizar o cadastro: http://localhost:3000/register");
+                    
                     Transport.send(message);
 
                     System.out.println("Done");
