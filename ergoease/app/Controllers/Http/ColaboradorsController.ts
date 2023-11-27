@@ -348,16 +348,16 @@ export default class ColaboradorsController {
             .table('empresas') 
             .insert({ 
                 cnpj : data.cnpj,
-                senha: await Hash.make(data.senha),
+                senha: await Hash.make(data.password),
                 email: data.email,
-                nome_empresa: data.nome,
-                telefone: data.telefone,
-                cidade: data.cidade,
-                rua: data.rua,
-                cep: data.cep,
-                numero: data.numero,
-                bairro: data.bairro,
-                estado: data.estado 
+                nome_empresa: data.fantasyName,
+                telefone: data.phoneNumber,
+                cidade: data.address.city,
+                rua: data.address.street,
+                cep: data.address.cep,
+                numero: data.address.number,
+                bairro: data.address.neighborhood,
+                estado: data.address.state 
             })
 
             response.ok({
