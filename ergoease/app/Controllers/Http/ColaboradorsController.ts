@@ -343,6 +343,8 @@ export default class ColaboradorsController {
     public async CadastroEmpresa({request, response}:HttpContextContract) {
         const data = request.body()
 
+        console.log(data)
+
         try {
             await Database
             .table('empresas') 
@@ -352,12 +354,12 @@ export default class ColaboradorsController {
                 email: data.email,
                 nome_empresa: data.fantasyName,
                 telefone: data.phoneNumber,
-                cidade: data.address.city,
-                rua: data.address.street,
-                cep: data.address.cep,
-                numero: data.address.number,
-                bairro: data.address.neighborhood,
-                estado: data.address.state 
+                cidade: data.city,
+                rua: data.street,
+                cep: data.cep,
+                numero: data.number,
+                estado: data.state, 
+                bairro: data.neighborhood
             })
 
             response.ok({
