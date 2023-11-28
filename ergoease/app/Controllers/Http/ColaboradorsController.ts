@@ -370,4 +370,40 @@ export default class ColaboradorsController {
         }
     }
 
+    //Esqueci senha empresa
+    public async EsqueciSenhaEmpresa({request,response}:HttpContextContract){
+        const data = request.body()
+
+        try{
+            var dados = await Database
+                .query()
+                .from('empresas')
+                .where('email', data.email)
+                .select('email', 'nome_empresa')
+
+            if (data.email == dados[0].email){
+                const token = jwt.sign({
+                        userId: dados[0].matricula,
+                        userName: dados[0].nome_empresa
+                       }, Env.get('JWT_PASSWORD'))
+
+                axios.post('http://localhost:8000/recuperarSenha', {nome: dados[0].nome_empresa, email: dados[0].email, token: token})
+                      .then(function (response) {
+
+                        console.log(response.data)
+                        //return response.data
+                        return JSON.stringify(response.data)
+
+                      })
+                      .catch(function (error) {
+                        console.error(error)
+                        return error
+                      });
+                return {email: dados[0].email, token: token }
+            }
+        }catch(error){
+            response.unauthorized()
+        }
+    }
+
 }
