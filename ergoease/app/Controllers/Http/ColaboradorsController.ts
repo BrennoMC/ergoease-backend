@@ -203,6 +203,8 @@ export default class ColaboradorsController {
     //Login empresa
     public async LoginEmpresa({request,response}:HttpContextContract){
         const data = request.body()
+
+
         try{
             var dados = await Database
                 .query()
@@ -210,12 +212,15 @@ export default class ColaboradorsController {
                 .where('email', data.email)
                 .select('senha','nome_empresa', 'cnpj')
 
-            if (await Hash.verify(String(dados[0].senha),data.senha)){
+
+            if (await Hash.verify(String(dados[0].senha),data.password)){
                 const token = jwt.sign({
                         userId: dados[0].cnpj,
                         userName: dados[0].nome_empresa
                        }, Env.get('JWT_PASSWORD'));
-                return { dados, token: token }
+                return { token: token }
+            } else {
+                return response.unauthorized()
             }
         }catch(error){
             response.unauthorized()
